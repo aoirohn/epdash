@@ -11,12 +11,17 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@holiday-jp/holiday_jp": "^2.4.0",
     "@remix-run/node": "^2.15.0",
     "@remix-run/react": "^2.15.0",
     "@remix-run/serve": "^2.15.0",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "googleapis": "^144.0.0",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.15.0",
