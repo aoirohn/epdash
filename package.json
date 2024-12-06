@@ -1,0 +1,8 @@
+{
+  "name": "epdash",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
+
