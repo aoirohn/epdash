@@ -6,9 +6,11 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "lint": "biome lint --write --diagnostic-level=error src/*",
+    "format": "biome check --write --linter-enabled=false src/*",
+    "lint-and-format": "biome check --write --diagnostic-level=error src/*"
   },
   "dependencies": {
     "@holiday-jp/holiday_jp": "^2.4.0",
@@ -21,6 +23,7 @@
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "recharts": "^2.14.1",
     "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {

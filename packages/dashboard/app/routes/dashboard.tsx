@@ -1,26 +1,26 @@
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Anniversary, getAnniversary } from "~/components/anniversary/anniversary";
 import { Calendar } from "~/components/calendar/calendar";
 import { Events } from "~/components/events/events";
 import { getCalendarEvents } from "~/components/events/getEvent";
-import { Weather, getWeather } from "~/components/weather/weather";
+import { Weather, openWeather } from "~/components/weather/weather";
 import { cn } from "~/utils/tailwind-merge";
 
 export const loader = async () => {
   const anniv = await getAnniversary();
 
   const locationId = process.env.WEATHER_LOCATION_ID;
-  const weather = locationId ? await getWeather(locationId) : undefined;
+
+  const weather = await openWeather.getEverything();
 
   const calendarId = process.env.CALENDAR_ID;
   const events = calendarId ? await getCalendarEvents(calendarId) : undefined;
 
-  return json({
+  return {
     anniv,
     weather,
     events,
-  });
+  };
 };
 
 export default function Dashboard() {
