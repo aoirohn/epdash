@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "start": "remix-serve ./build/server/index.js",
+    "start": "dotenv -- remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "lint": "biome lint --write --diagnostic-level=error src/*",
     "format": "biome check --write --linter-enabled=false src/*",
@@ -33,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "autoprefixer": "^10.4.19",
+    "dotenv-cli": "^7.4.4",
     "eslint": "^8.38.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.28.1",
