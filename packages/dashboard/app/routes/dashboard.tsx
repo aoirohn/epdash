@@ -1,4 +1,6 @@
 import { useLoaderData } from "@remix-run/react";
+import { format } from "date-fns";
+import type { ClassNameValue } from "tailwind-merge";
 import { Anniversary, getAnniversary } from "~/components/anniversary/anniversary";
 import { Calendar } from "~/components/calendar/calendar";
 import { Events } from "~/components/events/events";
@@ -8,8 +10,6 @@ import { cn } from "~/utils/tailwind-merge";
 
 export const loader = async () => {
   const anniv = await getAnniversary();
-
-  const locationId = process.env.WEATHER_LOCATION_ID;
 
   const weather = await openWeather.getEverything();
 
@@ -27,7 +27,7 @@ export default function Dashboard() {
   const { anniv, weather, events } = useLoaderData<typeof loader>();
 
   return (
-    <div className={cn("h-[480px] w-[800px] flex flex-row bg-[url('img/bg.png')] p-4 gap-4")}>
+    <div className={cn("h-[480px] w-[800px] flex flex-row p-4 gap-4 bg-cover bg-center", bgClsName())}>
       <div className="flex-grow basis-0 min-w-0">
         <Calendar />
       </div>
@@ -41,3 +41,36 @@ export default function Dashboard() {
     </div>
   );
 }
+
+const bgClsName = (): ClassNameValue => {
+  const month = format(new Date(), "MM");
+
+  switch (month) {
+    case "01":
+      return cn("bg-[url('/img/01.jpg')]");
+    case "02":
+      return cn("bg-[url('/img/02.jpg')]");
+    case "03":
+      return cn("bg-[url('/img/03.jpg')]");
+    case "04":
+      return cn("bg-[url('/img/04.jpg')]");
+    case "05":
+      return cn("bg-[url('/img/05.jpg')]");
+    case "06":
+      return cn("bg-[url('/img/06.jpg')]");
+    case "07":
+      return cn("bg-[url('/img/07.jpg')]");
+    case "08":
+      return cn("bg-[url('/img/08.jpg')]");
+    case "09":
+      return cn("bg-[url('/img/09.jpg')]");
+    case "10":
+      return cn("bg-[url('/img/10.jpg')]");
+    case "11":
+      return cn("bg-[url('/img/11.jpg')]");
+    case "12":
+      return cn("bg-[url('/img/12.jpg')]");
+    default:
+      return cn("bg-[url('/img/bg.png')]");
+  }
+};
