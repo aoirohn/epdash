@@ -9,6 +9,7 @@ dependencies = [
     "imagen",
     "lgpio>=0.2.2.0",
     "pillow>=11.0.0",
+    "python-dotenv>=1.0.1",
     "waveshare-epaper>=1.3.0",
 ]
 
