@@ -4,7 +4,7 @@ import type { ClassNameValue } from "tailwind-merge";
 import { Anniversary, getAnniversary } from "~/components/anniversary/anniversary";
 import { Calendar } from "~/components/calendar/calendar";
 import { Events } from "~/components/events/events";
-import { getCalendarEvents } from "~/components/events/getEvent";
+import { getCalendarEvents, getHolidayEvents } from "~/components/events/getEvent";
 import { Weather, openWeather } from "~/components/weather/weather";
 import { cn } from "~/utils/tailwind-merge";
 
@@ -15,21 +15,23 @@ export const loader = async () => {
 
   const calendarId = process.env.CALENDAR_ID;
   const events = calendarId ? await getCalendarEvents(calendarId) : undefined;
+  const holidayEvents = await getHolidayEvents("ja.japanese#holiday@group.v.calendar.google.com");
 
   return {
     anniv,
     weather,
     events,
+    holidayEvents,
   };
 };
 
 export default function Dashboard() {
-  const { anniv, weather, events } = useLoaderData<typeof loader>();
+  const { anniv, weather, events, holidayEvents } = useLoaderData<typeof loader>();
 
   return (
     <div className={cn("h-[480px] w-[800px] flex flex-row p-4 gap-4 bg-cover bg-center", bgClsName())}>
       <div className="flex-grow basis-0 min-w-0">
-        <Calendar />
+        <Calendar holidaysData={holidayEvents} eventsData={events} />
       </div>
       <div className="flex-grow basis-0 min-w-0 flex flex-col gap-2">
         <Anniversary annivData={anniv} className="h-[64px] flex-grow-0 flex-shrink-0" />

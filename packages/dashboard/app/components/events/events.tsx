@@ -22,7 +22,7 @@ export const Events = ({ eventsData, className }: EventsProps) => {
   return (
     <div className={cn("w-full", className)}>
       <div className="w-full h-full p-2 glass">
-        {eventsData.map((event) => {
+        {eventsData.slice(0, 10).map((event) => {
           let currentStartDate: Date | undefined = undefined;
           if (event.start?.dateTime) {
             currentStartDate = new Date(event.start?.dateTime);

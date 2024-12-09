@@ -7,6 +7,8 @@
     "build": "remix vite:build",
     "dev": "remix vite:dev",
     "start": "dotenv -- remix-serve ./build/server/index.js",
+    "pm2-start": "pm2 start pm2.config.cjs",
+    "pm2-stop": "pm2 stop pm2.config.cjs",
     "typecheck": "tsc",
     "lint": "biome lint --write --diagnostic-level=error src/*",
     "format": "biome check --write --linter-enabled=false src/*",
