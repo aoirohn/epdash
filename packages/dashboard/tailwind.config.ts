@@ -16,6 +16,9 @@ export default {
         "sub-gray": "#808080",
         "sub-light-gray": "#c0c0c0",
         "sub-dark-gray": "#404040",
+
+        "sub-light-red": "#ff2222",
+        "sub-light-blue": "#2222ff",
       },
       fontFamily: {
         sans: [
