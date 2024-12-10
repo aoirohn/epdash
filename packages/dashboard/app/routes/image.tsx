@@ -28,7 +28,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 
   const page = await context.newPage();
-  await page.goto("http://localhost:3000/dashboard");
+  const port = process.env.SERVER_PORT || 3000;
+  await page.goto(`http://localhost:${port}/dashboard`);
 
   const screenshot = await page.screenshot();
   await browser.close();
