@@ -89,10 +89,10 @@ const Charts = ({ hourlyWeathers, width, height, className }: ChartsProps) => {
   }));
 
   const m = {
-    t: 20,
+    t: 25,
     r: 25,
     b: 20,
-    l: 15,
+    l: 17,
   };
   const chartWidth = width - m.l - m.r;
   const chartHeight = height - m.t - m.b;
@@ -102,15 +102,15 @@ const Charts = ({ hourlyWeathers, width, height, className }: ChartsProps) => {
   };
 
   const length = data.length;
-  const tempMax = Math.ceil(Math.max(...data.map((d) => d.temp)) + 3);
-  const tempMin = Math.ceil(Math.min(...data.map((d) => d.temp)) - 3);
+  const tempMax = Math.ceil((Math.max(...data.map((d) => d.temp)) * 1.05) / 5) * 5;
+  const tempMin = Math.floor((Math.min(...data.map((d) => d.temp)) * 0.95) / 5) * 5;
   const tempDiff = tempMax - tempMin;
   const tempLine = data.reduce((acc, cur, i) => {
     return `${acc} ${m.l + (i / (length - 1)) * chartWidth},${origin.y - ((cur.temp - tempMin) / tempDiff) * chartHeight} `;
   }, "");
 
-  const rainMax = Math.ceil(Math.max(...data.map((d) => d.rain)) * 1.1 * 10) / 10;
-  const rainMin = Math.ceil(Math.min(...data.map((d) => d.rain)) * 0.9 * 10) / 10;
+  const rainMax = Math.ceil((Math.max(...data.map((d) => d.rain)) + 0.01 * 1.05) / 5) * 5;
+  const rainMin = Math.floor((Math.min(...data.map((d) => d.rain)) * 0.95) / 5) * 5;
   const rainDiff = rainMax - rainMin;
   const rainLine = data.slice(0, length - 1).reduce((acc, cur, i) => {
     const y = origin.y - (cur.rain / rainDiff) * chartHeight;
@@ -150,6 +150,38 @@ const Charts = ({ hourlyWeathers, width, height, className }: ChartsProps) => {
     return nodes;
   });
 
+  const yTicks = [];
+  let i = tempMin + 5;
+  while (i <= tempMax) {
+    yTicks.push(
+      <line
+        key={i}
+        x1={`${m.l - (i % 10 === 0 ? 3 : 2)}`}
+        x2={`${m.l + (i % 10 === 0 ? 2 : 0)}`}
+        y1={`${origin.y - ((i - tempMin) / tempDiff) * chartHeight}`}
+        y2={`${origin.y - ((i - tempMin) / tempDiff) * chartHeight}`}
+        stroke="#000"
+      />,
+    );
+    i += 5;
+  }
+
+  const y2Ticks = [];
+  let j = rainMin + 5;
+  while (j <= rainMax) {
+    y2Ticks.push(
+      <line
+        key={j}
+        x1={`${m.l + chartWidth - (j % 10 === 0 ? 2 : 0)}`}
+        x2={`${m.l + chartWidth + (j % 10 === 0 ? 3 : 2)}`}
+        y1={`${origin.y - ((j - rainMin) / rainDiff) * chartHeight}`}
+        y2={`${origin.y - ((j - rainMin) / rainDiff) * chartHeight}`}
+        stroke="#000"
+      />,
+    );
+    j += 5;
+  }
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -166,33 +198,37 @@ const Charts = ({ hourlyWeathers, width, height, className }: ChartsProps) => {
 
       {/* axis */}
       <polyline
-        points={`${origin.x},${m.t} ${origin.x},${origin.y} ${width - m.r},${origin.y} ${width - m.r},${m.t}`}
+        points={`${origin.x},${m.t - 5} ${origin.x},${origin.y} ${width - m.r},${origin.y} ${width - m.r},${m.t - 5}`}
         stroke="#000"
         fill="none"
       />
 
-      {/* xAxis */}
-      <text textAnchor="end" x={`${origin.x - 2}`} y={`${origin.y}`} fontSize="12" fill="#000">
+      {/* yAxis */}
+      <text textAnchor="end" x={`${origin.x - 4}`} y={`${origin.y}`} fontSize="12" fill="#000">
         {tempMin}
       </text>
-      <text textAnchor="end" x={`${origin.x - 2}`} y={`${m.t + 10}`} fontSize="12" fill="#000">
+      <text textAnchor="end" x={`${origin.x - 4}`} y={`${m.t + 5}`} fontSize="12" fill="#000">
         {tempMax}
       </text>
-      <text textAnchor="end" x={`${origin.x - 2}`} y={`${m.t - 2}`} fontSize="12" fill="#000">
+      <text textAnchor="end" x={`${origin.x - 4}`} y={`${m.t - 7}`} fontSize="12" fill="#000">
         ℃
       </text>
-      {/* 2nd xAxis */}
-      <text textAnchor="start" x={`${width - m.r + 2}`} y={`${origin.y}`} fontSize="12" fill="#000">
+      {/* yAxis ticks*/}
+      {yTicks}
+      {y2Ticks}
+
+      {/* 2nd yAxis */}
+      <text textAnchor="start" x={`${width - m.r + 4}`} y={`${origin.y}`} fontSize="12" fill="#000">
         {rainMin}
       </text>
-      <text textAnchor="start" x={`${width - m.r + 2}`} y={`${m.t + 10}`} fontSize="12" fill="#000">
+      <text textAnchor="start" x={`${width - m.r + 4}`} y={`${m.t + 5}`} fontSize="12" fill="#000">
         {rainMax}
       </text>
-      <text textAnchor="start" x={`${width - m.r + 2}`} y={`${m.t - 2}`} fontSize="12" fill="#000">
+      <text textAnchor="start" x={`${width - m.r + 4}`} y={`${m.t - 7}`} fontSize="12" fill="#000">
         mm
       </text>
 
-      {/* yAxis */}
+      {/* xAxis */}
       {dateTicks}
     </svg>
   );
