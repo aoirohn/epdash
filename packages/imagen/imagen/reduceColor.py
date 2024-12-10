@@ -2,7 +2,7 @@ from PIL import Image
 import numpy as np
 
 
-def reduce_color_for_epd_7in3f(image: Image.Image):
+def reduce_color_for_epd_7in3f(image: Image.Image) -> Image.Image:
     image = image.convert("RGB")
     image = image.resize((800, 480))
 
@@ -24,5 +24,5 @@ def reduce_color_for_epd_7in3f(image: Image.Image):
     return reduce_color(image, palimage)
 
 
-def reduce_color(image: Image.Image, palette: Image.Image):
+def reduce_color(image: Image.Image, palette: Image.Image) -> Image.Image:
     return image.quantize(palette=palette, dither=Image.Dither.FLOYDSTEINBERG)
