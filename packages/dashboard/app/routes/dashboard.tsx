@@ -28,6 +28,8 @@ export const loader = async () => {
 export default function Dashboard() {
   const { anniv, weather, events, holidayEvents } = useLoaderData<typeof loader>();
 
+  const eventsSum = events && holidayEvents ? [...(events ?? []), ...(holidayEvents ?? [])] : undefined;
+
   return (
     <div className={cn("h-[480px] w-[800px] flex flex-row p-4 gap-4 bg-cover bg-center", bgClsName())}>
       <div className="flex-grow basis-0 min-w-0">
@@ -37,7 +39,7 @@ export default function Dashboard() {
         <Anniversary annivData={anniv} className="h-[64px] flex-grow-0 flex-shrink-0" />
         <div className="h-full flex flex-col gap-4">
           <Weather weatherData={weather} className="h-[100px]" />
-          <Events eventsData={events} className="flex-grow" />
+          <Events eventsData={eventsSum} className="flex-grow" />
         </div>
       </div>
     </div>

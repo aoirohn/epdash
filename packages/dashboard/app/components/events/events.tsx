@@ -1,4 +1,4 @@
-import { format, subDays } from "date-fns";
+import { format, startOfDay, subDays } from "date-fns";
 import type { calendar_v3 } from "googleapis";
 import { useEffect, useState } from "react";
 import type { ClassNameValue } from "tailwind-merge";
@@ -18,22 +18,56 @@ export const Events = ({ eventsData, className }: EventsProps) => {
     );
   }
 
+  const today = startOfDay(new Date());
+
+  const events = eventsData
+    .map((event) => {
+      let startDate: Date | undefined = undefined;
+      if (event.start?.dateTime) {
+        startDate = new Date(event.start?.dateTime);
+      } else if (event.start?.date) {
+        startDate = new Date(event.start?.date);
+      }
+
+      let endDate: Date | undefined = undefined;
+      if (event.end?.dateTime) {
+        endDate = new Date(event.end?.dateTime);
+      } else if (event.end?.date) {
+        endDate = new Date(event.end?.date);
+      }
+
+      return { ...event, startDate, endDate };
+    })
+    .filter((event) => {
+      if (!event.endDate) {
+        return false;
+      }
+      return event.endDate >= today;
+    })
+    .sort((a, b) => {
+      if (!a.startDate || !b.startDate) {
+        return 0;
+      }
+      return a.startDate.getTime() - b.startDate.getTime();
+    })
+    .slice(0, 10);
+
   let prevStartDate: Date | undefined = undefined;
+  // const today = startOfDay(new Date());
   return (
     <div className={cn("w-full", className)}>
       <div className="w-full h-full p-2 glass">
-        {eventsData.slice(0, 10).map((event) => {
-          let currentStartDate: Date | undefined = undefined;
+        {events.map((event) => {
+          let startDate: Date | undefined = undefined;
           if (event.start?.dateTime) {
-            currentStartDate = new Date(event.start?.dateTime);
+            startDate = new Date(event.start?.dateTime);
           } else if (event.start?.date) {
-            currentStartDate = new Date(event.start?.date);
+            startDate = new Date(event.start?.date);
           }
 
           const skipDate =
-            currentStartDate?.getDate() === prevStartDate?.getDate() &&
-            currentStartDate?.getMonth() === prevStartDate?.getMonth();
-          prevStartDate = currentStartDate;
+            startDate?.getDate() === prevStartDate?.getDate() && startDate?.getMonth() === prevStartDate?.getMonth();
+          prevStartDate = startDate;
           return <Event key={event.id} event={event} skipDate={skipDate} />;
         })}
       </div>
