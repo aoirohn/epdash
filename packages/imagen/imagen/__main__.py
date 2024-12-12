@@ -25,7 +25,10 @@ def main():
     dithered_image = reduce_color_for_epd_7in3f(image)
 
     dithered_image.show()
-    dithered_image.save(Path("output/dithered_image.png"))
+
+    out_path = Path("output/dithered_image.png")
+    os.makedirs(out_path.parent, exist_ok=True)
+    dithered_image.save(out_path)
 
 
 if __name__ == "__main__":
