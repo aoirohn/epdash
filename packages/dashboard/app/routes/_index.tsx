@@ -12,8 +12,11 @@ export default function Index() {
         <Link to="/dashboard" reloadDocument className="text-blue-500 hover:underline text-3xl">
           Dashboard
         </Link>
-        <Link to="/image" reloadDocument className="text-blue-500 hover:underline text-3xl">
+        <Link to="/image.png" reloadDocument className="text-blue-500 hover:underline text-3xl">
           Image
+        </Link>
+        <Link to="/dithered-image.png" reloadDocument className="text-blue-500 hover:underline text-3xl">
+          Dithered Image
         </Link>
       </nav>
     </div>

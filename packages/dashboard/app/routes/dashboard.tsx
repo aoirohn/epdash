@@ -1,15 +1,20 @@
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import type { ClassNameValue } from "tailwind-merge";
-import { Anniversary, getAnniversary } from "~/components/anniversary/anniversary";
+import { Anniversary, type AnniversaryAPIResponse, getAnniversary } from "~/components/anniversary/anniversary";
 import { Calendar } from "~/components/calendar/calendar";
 import { Events } from "~/components/events/events";
 import { getCalendarEvents, getHolidayEvents } from "~/components/events/getEvent";
 import { Weather, openWeather } from "~/components/weather/weather";
+import Cache from "~/features/cache/cache";
 import { cn } from "~/utils/tailwind-merge";
 
 export const loader = async () => {
-  const anniv = await getAnniversary();
+  let anniv = Cache.getInstance().get<AnniversaryAPIResponse>("anniv");
+  if (!anniv || format(new Date(), "MMdd") !== anniv?.mmdd) {
+    anniv = await getAnniversary();
+    Cache.getInstance().set("anniv", anniv, 24 * 60 * 60 * 1000);
+  }
 
   const weather = await openWeather.getEverything();
 
