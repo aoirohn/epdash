@@ -1,4 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
+import { ditherImageBuffer } from "~/features/dithering/dithering";
 import { takeScreenshot } from "~/features/screenshot/takeScreenshot";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -7,7 +8,18 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const ss = await takeScreenshot(url);
 
-  return new Response(ss, {
+  const palette = [
+    "#FF0000", // Red
+    "#00FF00", // Green
+    "#0000FF", // Blue
+    "#FFFF00", // Yellow
+    "#FF8000", // Orange
+    "#000000", // Black
+    "#FFFFFF", // White
+  ]; // カラーパレット
+  const dithred = await ditherImageBuffer(ss, palette);
+
+  return new Response(dithred, {
     headers: {
       "Content-Type": "image/png",
     },
