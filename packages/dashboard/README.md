@@ -42,7 +42,7 @@ bun install
 初回はplaywrightの依存パッケージのインストールが必要です
 
 ```sh
-bunx playwright install
+bunx playwright install-deps
 ```
 
 ## PM2を使用したサーバーの起動
