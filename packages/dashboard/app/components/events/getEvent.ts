@@ -1,4 +1,4 @@
-import { addMonths, endOfMonth, startOfMonth, subMonths } from "date-fns";
+import { addDays, addMonths, endOfMonth, startOfMonth, subDays, subMonths } from "date-fns";
 import { google } from "googleapis";
 
 const scope = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events"];
@@ -12,8 +12,8 @@ export const getCalendarEvents = async (calendarId: string) => {
     const response = await calendar.events.list({
       auth: jwt,
       calendarId: calendarId,
-      timeMin: new Date().toISOString(),
-      maxResults: 20,
+      timeMin: startOfMonth(subDays(new Date(), 6)).toISOString(),
+      maxResults: 50,
       singleEvents: true,
       orderBy: "startTime",
     });
@@ -32,8 +32,8 @@ export const getHolidayEvents = async (calendarId: string) => {
     const response = await calendar.events.list({
       auth: jwt,
       calendarId: calendarId,
-      timeMin: startOfMonth(subMonths(new Date(), 1)).toISOString(),
-      timeMax: endOfMonth(addMonths(new Date(), 1)).toISOString(),
+      timeMin: startOfMonth(subDays(new Date(), 6)).toISOString(),
+      timeMax: addDays(endOfMonth(new Date()), 14).toISOString(),
       maxResults: 20,
       singleEvents: true,
       orderBy: "startTime",
