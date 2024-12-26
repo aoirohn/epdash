@@ -100,7 +100,7 @@ export const ditherImageBuffer = async (inputBuffer: Buffer, paletteHex: string[
     // ディザリング処理
     floydSteinbergDithering(image, palette);
 
-    // バッファとして出力（JPEG形式）
+    // バッファとして出力（PNG形式）
     const outputBuffer = await image.getBuffer(JimpMime.png);
     return outputBuffer;
   } catch (err) {

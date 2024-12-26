@@ -2,6 +2,8 @@
 
 Raspberry Pi Zero 2 と 7色描画可能な電子ペーパー Waveshare 7.3inch e-Paper HAT (F) を利用した電子ペーパーダッシュボードです
 
+詳細は[カラー電子ペーパーを使った個人ダッシューボード作成 2024 その2 - Qiita](https://qiita.com/aoirohn/private/db8d52af4546fabbe032)を参照してください。
+
 ![epdash](img/photo_stand.jpg)
 
 ## 構成図
