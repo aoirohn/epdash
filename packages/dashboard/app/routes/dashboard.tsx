@@ -6,14 +6,14 @@ import { Calendar } from "~/components/calendar/calendar";
 import { Events } from "~/components/events/events";
 import { getCalendarEvents, getHolidayEvents } from "~/components/events/getEvent";
 import { Weather, openWeather } from "~/components/weather/weather";
-import Cache from "~/features/cache/cache";
+import DCache from "~/features/cache/cache";
 import { cn } from "~/utils/tailwind-merge";
 
 export const loader = async () => {
-  let anniv = Cache.getInstance().get<AnniversaryAPIResponse>("anniv");
+  let anniv = DCache.getInstance().get<AnniversaryAPIResponse>("anniv");
   if (!anniv || format(new Date(), "MMdd") !== anniv?.mmdd) {
     anniv = await getAnniversary();
-    Cache.getInstance().set("anniv", anniv, 24 * 60 * 60 * 1000);
+    DCache.getInstance().set("anniv", anniv, 24 * 60 * 60 * 1000);
   }
 
   const weather = await openWeather.getEverything();

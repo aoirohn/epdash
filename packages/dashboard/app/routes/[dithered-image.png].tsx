@@ -1,5 +1,5 @@
 import type { LoaderFunction } from "@remix-run/node";
-import Cache from "~/features/cache/cache";
+import DCache from "~/features/cache/cache";
 import { ditherImageBuffer } from "~/features/dithering/dithering";
 import { takeScreenshot } from "~/features/screenshot/takeScreenshot";
 
@@ -7,7 +7,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const port = process.env.SERVER_PORT || 3000;
   const url = `http://localhost:${port}/dashboard`;
 
-  const cache = Cache.getInstance();
+  const cache = DCache.getInstance();
 
   let dithredImg = cache.get<Buffer>("dithredImg");
 

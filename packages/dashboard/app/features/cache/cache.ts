@@ -1,16 +1,16 @@
-export class Cache {
-  private static instance: Cache;
+export class DCache {
+  private static instance: DCache;
   private cache: Map<string, { value: any; expiry: number }>;
 
   private constructor() {
     this.cache = new Map();
   }
 
-  public static getInstance(): Cache {
-    if (!Cache.instance) {
-      Cache.instance = new Cache();
+  public static getInstance(): DCache {
+    if (!DCache.instance) {
+      DCache.instance = new DCache();
     }
-    return Cache.instance;
+    return DCache.instance;
   }
 
   public set<T>(key: string, value: T, ttl: number): void {
@@ -41,4 +41,4 @@ export class Cache {
   }
 }
 
-export default Cache;
+export default DCache;
