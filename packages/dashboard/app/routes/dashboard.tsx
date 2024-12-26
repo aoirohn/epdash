@@ -1,15 +1,20 @@
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import type { ClassNameValue } from "tailwind-merge";
-import { Anniversary, getAnniversary } from "~/components/anniversary/anniversary";
+import { Anniversary, type AnniversaryAPIResponse, getAnniversary } from "~/components/anniversary/anniversary";
 import { Calendar } from "~/components/calendar/calendar";
 import { Events } from "~/components/events/events";
 import { getCalendarEvents, getHolidayEvents } from "~/components/events/getEvent";
 import { Weather, openWeather } from "~/components/weather/weather";
+import DCache from "~/features/cache/cache";
 import { cn } from "~/utils/tailwind-merge";
 
 export const loader = async () => {
-  const anniv = await getAnniversary();
+  let anniv = DCache.getInstance().get<AnniversaryAPIResponse>("anniv");
+  if (!anniv || format(new Date(), "MMdd") !== anniv?.mmdd) {
+    anniv = await getAnniversary();
+    DCache.getInstance().set("anniv", anniv, 24 * 60 * 60 * 1000);
+  }
 
   const weather = await openWeather.getEverything();
 
@@ -28,6 +33,8 @@ export const loader = async () => {
 export default function Dashboard() {
   const { anniv, weather, events, holidayEvents } = useLoaderData<typeof loader>();
 
+  const eventsSum = events && holidayEvents ? [...(events ?? []), ...(holidayEvents ?? [])] : undefined;
+
   return (
     <div className={cn("h-[480px] w-[800px] flex flex-row p-4 gap-4 bg-cover bg-center", bgClsName())}>
       <div className="flex-grow basis-0 min-w-0">
@@ -37,7 +44,7 @@ export default function Dashboard() {
         <Anniversary annivData={anniv} className="h-[64px] flex-grow-0 flex-shrink-0" />
         <div className="h-full flex flex-col gap-4">
           <Weather weatherData={weather} className="h-[100px]" />
-          <Events eventsData={events} className="flex-grow" />
+          <Events eventsData={eventsSum} className="flex-grow" />
         </div>
       </div>
     </div>
